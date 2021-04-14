@@ -10,10 +10,12 @@
         "declarationMap": true,
 
         "rootDir": "../src",
-        "outDir": "../dist",
 
         "importsNotUsedAsValues": "preserve",
-        "isolatedModules": true
+        "isolatedModules": true,
+
+        "jsx": "react",
+        "baseUrl": "../src"
     },
     "include": ["../src"]
 }

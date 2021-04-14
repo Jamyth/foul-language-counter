@@ -3,6 +3,7 @@ node_modules/**
 
 # Build
 dist/**
+build/**
 
 # OS
 *.DS_Store
@@ -10,3 +11,5 @@ dist/**
 # logs
 */npm-debug.log
 */yarn-error.log
+
+.webpack-cache/
