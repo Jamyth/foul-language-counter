@@ -1,0 +1,26 @@
+{
+    "name": "foul-language-counter",
+    "version": "1.0.0",
+    "main": "dist/index.js",
+    "license": "MIT",
+    "scripts": {
+        "run-script": "ts-node --project config/tsconfig.script.json",
+        "format": "yarn run-script script/format.ts",
+        "lint": "yarn run-script script/lint.ts",
+        "build": "yarn run-script script/build.ts",
+        "test": "mocha --require ts-node/register ./test/**/*.test.ts"
+    },
+    "files": [
+        "dist/**"
+    ],
+    "devDependencies": {
+        "@iamyth/logger": "1.0.4",
+        "@iamyth/prettier-config": "0.0.1",
+        "@types/node": "14.14.37",
+        "eslint-config-iamyth": "0.0.5",
+        "mocha": "8.3.2",
+        "prettier": "2.2.1",
+        "ts-node": "9.1.1",
+        "typescript": "4.2.4"
+    }
+}
