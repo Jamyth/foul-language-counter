@@ -2,7 +2,7 @@ import React from 'react';
 import { Button, Flex, Box, Heading, ButtonGroup, Text, Input, useColorMode } from '@chakra-ui/react';
 import { useMainStateAction, useMainState } from '../index';
 import { ImVolumeMute2, ImVolumeMedium } from 'react-icons/im';
-import { FiSun, FiMoon } from 'react-icons/Fi';
+import { FiSun, FiMoon } from 'react-icons/fi';
 
 export const Main = React.memo(() => {
     const isMuted = useMainState((state) => state.muted);
