@@ -1,27 +1,15 @@
-import { useToast } from '@chakra-ui/react';
+import Recoil from 'recoil';
+import { ErrorState } from 'component/ErrorBoundary';
 
 export const useErrorHandler = () => {
-    const toast = useToast();
+    const setError = Recoil.useSetRecoilState(ErrorState);
+
     return (e: any) => {
         if (e instanceof Error) {
-            toast({
-                title: '唷，有錯誤喔！',
-                description: e.message,
-                status: 'error',
-                duration: 5000,
-                isClosable: true,
-                position: 'top',
-            });
+            setError(e);
             return;
         }
 
-        toast({
-            title: '不知名錯誤',
-            description: '伺服器發生錯誤',
-            status: 'error',
-            duration: 3000,
-            isClosable: true,
-            position: 'top',
-        });
+        setError(new Error('伺服器發生錯誤'));
     };
 };

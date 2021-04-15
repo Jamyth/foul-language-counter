@@ -40,6 +40,10 @@ export const Main = React.memo(() => {
         }
     };
 
+    React.useEffect(() => {
+        setTemp(String(delta));
+    }, [delta]);
+
     return (
         <Flex
             flex={1}
