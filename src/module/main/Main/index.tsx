@@ -9,30 +9,71 @@ export const Main = React.memo(() => {
     const accumulated = useMainState((state) => state.accumulated);
     const amount = useMainState((state) => state.amount);
     const delta = useMainState((state) => state.delta);
-    const { toggleMute, clearAmount, updateDelta, add } = useMainStateAction();
+    const { toggleMute, clearAmount, updateDelta, add, deduct } = useMainStateAction();
     const { colorMode, toggleColorMode } = useColorMode();
+
+    const [temp, setTemp] = React.useState(`${delta}`);
+
+    const addDelta = () => {
+        updateDelta(delta + 5);
+    };
+
+    const deductDelta = () => {
+        updateDelta(delta - 5);
+    };
+
+    const onInputBlur = () => {
+        const _delta = parseInt(temp);
+        if (isNaN(_delta)) {
+            setTemp(`${delta}`);
+            return;
+        }
+        const extra = _delta % 5;
+        if (extra >= 3) {
+            const val = _delta + 5 - extra;
+            updateDelta(val);
+            setTemp(String(val));
+        } else {
+            const val = _delta - extra;
+            updateDelta(val);
+            setTemp(String(val));
+        }
+    };
+
     return (
-        <Flex flex={1} direction="column" minH="100vh" justifyContent="space-between">
-            <Flex alignItems="center" justifyContent="center" p={10} pt={16}>
-                <Heading size="lg">粗口免問</Heading>
+        <Flex
+            flex={1}
+            direction="column"
+            overflow="hidden"
+            minH="-webkit-fill-available"
+            justifyContent="space-between"
+        >
+            <Flex alignItems="center" justifyContent="center" p={8}>
+                <Heading size="lg">粗口禁</Heading>
             </Flex>
 
-            <Flex flexDirection="column" px={24}>
-                <Box>累計罰款： HKD ${accumulated}</Box>
-                <Box>新罰款： HKD ${amount}</Box>
-                <Flex alignItems="center" justifyContent="center" w="100%" mt={8}>
-                    <Button onClick={add} colorScheme="teal" width="35vw" height="35vw">
-                        一野罰落去！
-                    </Button>
-                </Flex>
+            <Flex flexDirection="column" alignItems="center" justifyContent="center" px={24}>
+                <Box>
+                    <Box>累計罰款： HKD ${accumulated}</Box>
+                    <Box>新罰款： HKD ${amount}</Box>
+                </Box>
+                <Button mt={8} onClick={add} colorScheme="teal" width="40vw" height="40vw">
+                    一野罰落去！
+                </Button>
                 <Flex mt={8} flexDirection="column">
                     <Text>調整罰金</Text>
                     <ButtonGroup isAttached mt={2}>
-                        <Button colorScheme="teal" onClick={() => updateDelta(delta - 5)}>
+                        <Button onClick={deductDelta} colorScheme="teal">
                             -
                         </Button>
-                        <Input colorScheme="teal" borderRadius={0} value={delta} type="number" />
-                        <Button colorScheme="teal" onClick={() => updateDelta(delta + 5)}>
+                        <Input
+                            colorScheme="teal"
+                            onChange={(e) => setTemp(e.target.value)}
+                            onBlur={onInputBlur}
+                            borderRadius={0}
+                            value={temp}
+                        />
+                        <Button onClick={addDelta} colorScheme="teal">
                             +
                         </Button>
                     </ButtonGroup>
@@ -46,6 +87,9 @@ export const Main = React.memo(() => {
                     </Button>
                     <Button colorScheme="teal" onClick={clearAmount}>
                         找數
+                    </Button>
+                    <Button colorScheme="teal" onClick={deduct}>
+                        扣數
                     </Button>
                     <Button colorScheme="teal" onClick={toggleColorMode}>
                         {colorMode === 'light' ? <FiSun /> : <FiMoon />}

@@ -21,8 +21,6 @@ const MainState = Recoil.atom({
     default: initialState,
 });
 
-const audio = new Audio(require('./Main/asset/audio.mp3'));
-
 export const useMainState = <T>(fn: (state: State) => T): T => {
     const state = Recoil.useRecoilValue(MainState);
     return fn(state);
@@ -42,7 +40,7 @@ export const useMainStateAction = () => {
 
     const updateDelta = (delta: number) => {
         if (delta < 5) {
-            return;
+            throw new Error('罰金不能少於 5 喔');
         }
         setState((state) => (state.delta = delta));
         updateLocalStorage();
@@ -54,7 +52,14 @@ export const useMainStateAction = () => {
     };
 
     const clearAmount = () => {
-        setState((state) => (state.amount = 0));
+        const amount = getState().amount;
+        if (amount === 0) {
+            throw new Error('冇數要找啵！');
+        }
+        setState((state) => {
+            state.accumulated += state.amount;
+            state.amount = 0;
+        });
         updateLocalStorage();
     };
 
@@ -62,17 +67,32 @@ export const useMainStateAction = () => {
         if (getState().muted) {
             return;
         }
-        audio.play();
+        setTimeout(() => {
+            new Audio(require('./Main/asset/audio.mp3')).play();
+        }, 0);
     };
 
     const add = () => {
         const delta = getState().delta;
         setState((state) => {
             state.amount += delta;
-            state.accumulated += delta;
         });
         updateLocalStorage();
         playSound();
+    };
+
+    const deduct = () => {
+        const delta = getState().delta;
+        setState((state) => {
+            const extra = delta - state.amount;
+            if (extra > 0) {
+                state.amount = 0;
+                state.accumulated = Math.max(0, state.accumulated - extra);
+                return;
+            }
+            state.amount = state.amount - delta;
+        });
+        updateLocalStorage();
     };
 
     return {
@@ -82,6 +102,7 @@ export const useMainStateAction = () => {
         playSound,
         toggleMute,
         updateDelta,
+        deduct,
     };
 };
 
