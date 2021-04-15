@@ -1,0 +1,15 @@
+# **Foul Language Counter**
+
+A funny side project, that can penalize your friend for saying dirty words !
+
+## **Feature**
+
+-   PWA
+-   Webpack
+-   React
+-   Chakra-ui
+-   Coil-React
+
+## **Screenshot**
+
+![demo](/img/demo.jpeg)
