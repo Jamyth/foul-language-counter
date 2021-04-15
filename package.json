@@ -17,7 +17,7 @@
     "devDependencies": {
         "@iamyth/logger": "1.0.4",
         "@iamyth/prettier-config": "0.0.1",
-        "@iamyth/webpack-runner": "1.0.6",
+        "@iamyth/webpack-runner": "1.0.7",
         "@types/node": "14.14.37",
         "eslint-config-iamyth": "0.0.5",
         "mocha": "8.3.2",
