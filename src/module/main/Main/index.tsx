@@ -24,7 +24,7 @@ export const Main = React.memo(() => {
 
     const onInputBlur = () => {
         const _delta = parseInt(temp);
-        if (isNaN(_delta)) {
+        if (isNaN(_delta) || _delta < 5) {
             setTemp(`${delta}`);
             return;
         }
