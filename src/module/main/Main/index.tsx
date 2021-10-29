@@ -3,14 +3,19 @@ import { Button, Flex, Box, Heading, ButtonGroup, Text, Input, useColorMode } fr
 import { useMainStateAction, useMainState } from '../index';
 import { ImVolumeMute2, ImVolumeMedium } from 'react-icons/im';
 import { FiSun, FiMoon } from 'react-icons/fi';
+import { HistoryModal } from './HistoryModal';
+
+const VERSION_NUMBER = 'v1.1';
 
 export const Main = React.memo(() => {
     const isMuted = useMainState((state) => state.muted);
     const accumulated = useMainState((state) => state.accumulated);
+    const text = useMainState((state) => state.text);
     const amount = useMainState((state) => state.amount);
     const delta = useMainState((state) => state.delta);
-    const { toggleMute, clearAmount, updateDelta, add, deduct } = useMainStateAction();
+    const { toggleMute, clearAmount, updateDelta, add, deduct, updateText } = useMainStateAction();
     const { colorMode, toggleColorMode } = useColorMode();
+    const [active, setActive] = React.useState(false);
 
     const [temp, setTemp] = React.useState(`${delta}`);
 
@@ -45,15 +50,11 @@ export const Main = React.memo(() => {
     }, [delta]);
 
     return (
-        <Flex
-            flex={1}
-            direction="column"
-            overflow="hidden"
-            minH="-webkit-fill-available"
-            justifyContent="space-between"
-        >
-            <Flex alignItems="center" justifyContent="center" p={8}>
+        <Flex flex={1} h="100%" direction="column" justifyContent="space-between">
+            <Flex alignItems="center" justifyContent="center" flexDirection="column" p={8}>
                 <Heading size="lg">粗口禁</Heading>
+
+                <Flex fontSize="14px">{VERSION_NUMBER}</Flex>
             </Flex>
 
             <Flex flexDirection="column" alignItems="center" justifyContent="center" px={24}>
@@ -81,10 +82,12 @@ export const Main = React.memo(() => {
                             +
                         </Button>
                     </ButtonGroup>
+                    <Text mt={4}>原因</Text>
+                    <Input colorScheme="teal" value={text} onChange={(e) => updateText(e.target.value)} />
                 </Flex>
             </Flex>
 
-            <Flex alignItems="center" p={8}>
+            <Flex alignItems="center" py={8} px={4}>
                 <ButtonGroup>
                     <Button colorScheme="teal" onClick={toggleMute}>
                         {isMuted ? <ImVolumeMute2 /> : <ImVolumeMedium />}
@@ -95,11 +98,15 @@ export const Main = React.memo(() => {
                     <Button colorScheme="teal" onClick={deduct}>
                         扣數
                     </Button>
+                    <Button colorScheme="teal" onClick={() => setActive(true)}>
+                        紀錄
+                    </Button>
                     <Button colorScheme="teal" onClick={toggleColorMode}>
                         {colorMode === 'light' ? <FiSun /> : <FiMoon />}
                     </Button>
                 </ButtonGroup>
             </Flex>
+            <HistoryModal active={active} setActive={setActive} />
         </Flex>
     );
 });

@@ -1,12 +1,14 @@
 import Recoil from 'recoil';
 import { injectLifeCycle, useCoilState } from 'coil-react';
 import { Main } from './Main';
+import { FoulHistoryUtil } from 'util/FoulHistoryUtil';
 
 interface State {
     accumulated: number;
     amount: number;
     delta: number;
     muted: boolean;
+    text: string;
 }
 
 const initialState: State = {
@@ -14,6 +16,7 @@ const initialState: State = {
     amount: 0,
     delta: 5,
     muted: false,
+    text: '',
 };
 
 const MainState = Recoil.atom({
@@ -72,10 +75,17 @@ export const useMainStateAction = () => {
         }, 0);
     };
 
+    const updateText = (text: string) => {
+        setState((state) => (state.text = text));
+    };
+
     const add = () => {
         const delta = getState().delta;
+        const text = getState().text;
+        FoulHistoryUtil.push(text, delta);
         setState((state) => {
             state.amount += delta;
+            state.text = '';
         });
         updateLocalStorage();
         playSound();
@@ -103,6 +113,7 @@ export const useMainStateAction = () => {
         toggleMute,
         updateDelta,
         deduct,
+        updateText,
     };
 };
 
